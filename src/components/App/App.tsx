@@ -3,7 +3,7 @@ import Header from '../Layout/Header';
 import Plan from '../Plan/Plan';
 import './App.css';
 
-function App() {
+function App () {
   return <div className='App'>
     <Header/>
     <Plan />

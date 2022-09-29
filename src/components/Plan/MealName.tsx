@@ -1,34 +1,38 @@
-import PropTypes from 'prop-types';
-import { FormControl, FormLabel, FormErrorMessage, FormHelperText, Input } from '@chakra-ui/react';
-import React, { SetStateAction, useState } from 'react';
+import {
+  FormControl,
+  FormLabel,
+  Input,
+} from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { setMealName } from '../../reducers/mealReducer';
-
+import { Meal, setMealName } from '../../reducers/mealReducer';
 
 type MealNameProps = {
   index: number;
+  isSubmit: boolean;
 };
 
-const MealName = ({ index }: MealNameProps) => {
+const MealName = ({ index, isSubmit }: MealNameProps) => {
   const { meals } = useAppSelector((state) => state.meal);
   const dispatch = useAppDispatch();
-  console.log(meals);
+  const [mealObj, setMealObj] = useState<Meal>({ name: '', index: index });
+  useEffect(() => {
+    if (isSubmit) {
+      dispatch(setMealName(mealObj));
+    }
+  }, [isSubmit]);
+  console.log(mealObj);
 
   return (
     <FormControl isRequired>
-      <FormLabel>Repas {index + 1}</FormLabel>
+      <FormLabel htmlFor={`Repas ${index + 1}`}>Repas {index + 1}</FormLabel>
       <Input
+        id={`Repas ${index + 1}`}
         placeholder="Entrez un nom"
-        onChange={(e) =>
-          dispatch(setMealName({ name: e.target.value, index: index, food: [{}] }))
-        }
+        onChange={(e) => setMealObj({ name: e.target.value, index: index })}
       />
     </FormControl>
   );
 };
-
-// MealName.propTypes = {
-//   setMealName: PropTypes.func.isRequired,
-// };
 
 export default MealName;

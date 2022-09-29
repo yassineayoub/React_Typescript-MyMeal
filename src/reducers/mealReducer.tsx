@@ -1,11 +1,11 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // Define a type for the slice state
 interface MealState {
   mealCount: number;
   meals: object[];
 }
-type Meal = {
+export type Meal = {
   name: string;
   index: number;
   food?: object[];
@@ -18,7 +18,7 @@ const initialState: MealState = {
 };
 
 export const mealReducer = createSlice({
-  name: 'meal',
+  name: "meal",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
@@ -46,8 +46,7 @@ export const mealReducer = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { 
-  increment, decrement, incrementByAmount, setMealName 
-} = mealReducer.actions;
+export const { increment, decrement, incrementByAmount, setMealName } =
+  mealReducer.actions;
 
 export default mealReducer.reducer;

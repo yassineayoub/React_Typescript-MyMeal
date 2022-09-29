@@ -62,7 +62,6 @@
     "object-shorthand": "off",
     "react/jsx-uses-react": "off",
     "no-unused-vars":"warn",
-    "quotes":"warn",
     "max-len":"warn"
   }
   
