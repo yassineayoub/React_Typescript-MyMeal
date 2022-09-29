@@ -6,7 +6,6 @@ import { decrement, increment, incrementByAmount } from '../../reducers/mealRedu
 const MealCounter = () => {
   const mealCount = useAppSelector((state) => state.meal.mealCount);
   const dispatch = useAppDispatch();
-  console.log;
   return (
     <Stack direction="row" alignItems="center" justifyContent="center">
       <Text>Nombre de repas par jour</Text>

@@ -2,13 +2,20 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 // Define a type for the slice state
 interface MealState {
-  mealCount: number
+  mealCount: number;
+  meals: object[];
 }
+type Meal = {
+  name: string;
+  index: number;
+  food?: object[];
+};
 
 // Define the initial state using that type
 const initialState: MealState = {
   mealCount: 1,
-}
+  meals: [],
+};
 
 export const mealReducer = createSlice({
   name: 'meal',
@@ -25,14 +32,22 @@ export const mealReducer = createSlice({
     decrement: (state) => {
       state.mealCount -= 1;
     },
-       // Use the PayloadAction type to declare the contents of `action.payload`
+    // Use the PayloadAction type to declare the contents of `action.payload`
     incrementByAmount: (state, action: PayloadAction<number>) => {
-    state.mealCount = action.payload
-  },
+      state.mealCount = action.payload;
+    },
+    setMealName: (state, action: PayloadAction<Meal>) => {
+      const { index } = action.payload;
+      const mealArray = [...state.meals];
+      mealArray[index] = { ...mealArray[index], ...action.payload };
+      state.meals = mealArray;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount } = mealReducer.actions;
+export const { 
+  increment, decrement, incrementByAmount, setMealName 
+} = mealReducer.actions;
 
 export default mealReducer.reducer;
