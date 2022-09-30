@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // Define a type for the slice state
 interface MealState {
   mealCount: number;
-  meals: object[];
+  meals: Meal[];
 }
 export type Meal = {
   name: string;

@@ -7,7 +7,12 @@ import Plan from '../components/Plan/Plan';
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element: (
+      <>
+        <Header />
+        <Plan />
+      </>
+    ),
   },
   {
     path: '/food',

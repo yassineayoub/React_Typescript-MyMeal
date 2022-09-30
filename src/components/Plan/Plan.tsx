@@ -1,4 +1,4 @@
-import { Button, FormControl } from '@chakra-ui/react';
+import { Box, Button, FormControl } from '@chakra-ui/react';
 import { CheckIcon } from '@chakra-ui/icons';
 import { useAppSelector } from '../../store/hooks';
 import { Link } from 'react-router-dom';
@@ -23,12 +23,12 @@ const Plan = () => {
   }, [isSubmit]);
 
   return (
-    <>
+    <Box w={["90%","60%","40%"]}  margin="auto">
       <MealCounter />
       <form onSubmit={handleSubmitForm}>
-        <FormControl width="80%" margin="auto">
+        <FormControl >
           {rows.map((v, index) => (
-            <MealName key={index} index={index} isSubmit={isSubmit} />
+            <MealName key={index} index={index} />
           ))}
           <Button
             type="submit"
@@ -50,7 +50,7 @@ const Plan = () => {
           Suivant
         </Button>
       </Link>
-    </>
+      </Box>
   );
 };
 

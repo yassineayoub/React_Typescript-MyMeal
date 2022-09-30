@@ -4,7 +4,7 @@ import React from 'react';
 const Header = () => {
   return (
     <>
-      <Heading>My Meal</Heading>
+      <Heading textAlign="center">My Meal</Heading>
     </>
   );
 };

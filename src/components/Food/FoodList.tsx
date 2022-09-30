@@ -1,13 +1,17 @@
 import PropTypes from 'prop-types';
-import { ListItem, UnorderedList } from '@chakra-ui/react';
+import { Badge, List, ListIcon, ListItem, UnorderedList } from '@chakra-ui/react';
+import { CheckIcon, SmallAddIcon } from '@chakra-ui/icons';
 import React, { useEffect, useState } from 'react';
 
 type FoodItem = {
+  id: number;
   foodName: string;
   protein: number;
   carbs: number;
   fat: number;
+  checked?: boolean;
 };
+
 type FoodListProps = {
   food: FoodItem[];
   search: string;
@@ -15,27 +19,41 @@ type FoodListProps = {
 
 const FoodList = ({ food, search }: FoodListProps) => {
   const [filteredArray, setFilteredArray] = useState<FoodItem[]>([]);
+
+  const handleChecked = (id: number) => {
+    const foodArray = [...filteredArray];
+    const foodIndex = foodArray.findIndex((foodItem) => foodItem.id === id);
+    foodArray[foodIndex].checked = !foodArray[foodIndex].checked;
+    setFilteredArray(foodArray);
+  };
+
   console.log(filteredArray);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      console.log('je cherche !');
       setFilteredArray(food.filter((item) => item.foodName.includes(search)));
-    }, 400);
-
+    }, 200);
     return () => clearTimeout(timer);
   }, [search]);
 
   return (
-    <UnorderedList>
+    <List>
       {filteredArray.map(
-        ({ foodName, protein, carbs, fat }: FoodItem, index: number) => (
-          <ListItem
-            key={index}
-          >{`${foodName} proteines:${protein} carbs:${carbs} fat:${fat} `}</ListItem>
+        (
+          { foodName, protein, carbs, fat, id, checked }: FoodItem,
+          index: number
+        ) => (
+          <ListItem key={index} onClick={() => handleChecked(id)}>
+            <ListIcon
+              as={checked ? CheckIcon : SmallAddIcon}
+              color="green.700"
+            />
+            <Badge color="blue">{protein}</Badge>
+            {`${foodName} proteines: ${protein} carbs:${carbs} fat:${fat} `}
+          </ListItem>
         )
       )}
-    </UnorderedList>
+    </List>
   );
 };
 
