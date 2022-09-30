@@ -4,7 +4,20 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 interface MealState {
   mealCount: number;
   meals: Meal[];
+  food: FoodItem[]
 }
+
+export type FoodItem = {
+  id: number;
+  foodName: string;
+  protein: number;
+  carbs: number;
+  fat: number;
+  serving: number;
+  unit: string;
+  checked?: boolean;
+};
+
 export type Meal = {
   name: string;
   index: number;
@@ -16,6 +29,7 @@ export type Meal = {
 const initialState: MealState = {
   mealCount: 1,
   meals: [],
+  food: [],
 };
 
 export const mealReducer = createSlice({

@@ -11,17 +11,9 @@ import {
 } from '@chakra-ui/react';
 import { CheckIcon, SmallAddIcon } from '@chakra-ui/icons';
 import React, { useEffect, useState } from 'react';
+import { FoodItem } from '../../reducers/mealReducer';
 
-type FoodItem = {
-  id: number;
-  foodName: string;
-  protein: number;
-  carbs: number;
-  fat: number;
-  serving: number;
-  unit: string;
-  checked?: boolean;
-};
+
 
 type FoodListProps = {
   food: FoodItem[];
