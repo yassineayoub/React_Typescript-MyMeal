@@ -5,57 +5,20 @@ import FoodList from './FoodList';
 import FoodSearch from './FoodSearch';
 import { CheckIcon } from '@chakra-ui/icons';
 import FoodCheckBox from './FoodCheckBox';
-import { Form } from 'formik';
-
-const food = [
-  {
-    foodName: 'noisette',
-    protein: 10,
-    fat: 30,
-    carbs: 40,
-    id: 1,
-    serving: 100,
-    unit: 'g',
-  },
-  {
-    foodName: 'amande',
-    protein: 20,
-    fat: 34,
-    carbs: 35,
-    id: 2,
-    serving: 100,
-    unit: 'g',
-  },
-  {
-    foodName: 'amande',
-    protein: 20,
-    fat: 34,
-    carbs: 35,
-    id: 3,
-    serving: 100,
-    unit: 'g',
-  },
-  {
-    foodName: 'choux',
-    protein: 20,
-    fat: 34,
-    carbs: 35,
-    id: 4,
-    serving: 100,
-    unit: 'g',
-  },
-];
+import { useAppDispatch } from '../../store/hooks';
+import { insertFoodItemsToMeal } from '../../reducers/mealReducer';
 
 export type CheckedMeal = {
-  checkedMeal: object[]
-}
+  checkedMeal: object[];
+};
 
 const Food = () => {
-  const [search, setSearch] = useState('');
-  const handleAddFood = (e: React.FormEvent<HTMLFormElement>) => {
+  const dispatch = useAppDispatch();
+  const handleDispatchSetFoodItems = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(e)
-  }
+    dispatch(insertFoodItemsToMeal())
+    console.log("c'est ajouté boy")
+  };
   return (
     <Box
       w={['90%', '60%', '40%']}
@@ -66,19 +29,19 @@ const Food = () => {
       textAlign="center"
       gap={5}
     >
-      <FoodSearch setSearch={setSearch} search={search} />
-      <FoodList food={food} search={search} />
-      <form onSubmit={(e) => handleAddFood(e)}>
+      <FoodSearch />
+      <FoodList />
+      <form onSubmit={(e) => handleDispatchSetFoodItems(e)}>
         <FormControl>
           <FoodCheckBox />
           <Button
-          type="submit"
-          colorScheme="blue"
-          marginTop={5}
-          rightIcon={<CheckIcon />}
-        >
-          Ajouter
-        </Button>
+            type="submit"
+            colorScheme="blue"
+            marginTop={5}
+            rightIcon={<CheckIcon />}
+          >
+            Ajouter
+          </Button>
         </FormControl>
       </form>
       <Stack margin="auto">

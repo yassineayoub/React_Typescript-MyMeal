@@ -1,45 +1,83 @@
 import PropTypes from 'prop-types';
-import {
-  Badge,
-  Box,
-  List,
-  ListIcon,
-  ListItem,
-  Stack,
-  Text,
-  UnorderedList,
-} from '@chakra-ui/react';
+import { Badge, Box, List, ListIcon, ListItem, Stack } from '@chakra-ui/react';
 import { CheckIcon, SmallAddIcon } from '@chakra-ui/icons';
 import React, { useEffect, useState } from 'react';
-import { FoodItem } from '../../reducers/mealReducer';
+import { FoodItem, setFoodItems } from '../../reducers/mealReducer';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
+const food = [
+  {
+    foodName: 'noisette',
+    protein: 10,
+    fat: 30,
+    carbs: 40,
+    id: 1,
+    serving: 100,
+    unit: 'g',
+  },
+  {
+    foodName: 'amande',
+    protein: 20,
+    fat: 34,
+    carbs: 35,
+    id: 2,
+    serving: 100,
+    unit: 'g',
+  },
+  {
+    foodName: 'amande',
+    protein: 20,
+    fat: 34,
+    carbs: 35,
+    id: 3,
+    serving: 100,
+    unit: 'g',
+  },
+  {
+    foodName: 'choux',
+    protein: 20,
+    fat: 34,
+    carbs: 35,
+    id: 4,
+    serving: 100,
+    unit: 'g',
+  },
+];
 
-
-type FoodListProps = {
-  food: FoodItem[];
-  search: string;
-};
-
-const FoodList = ({ food, search }: FoodListProps) => {
-  const [filteredArray, setFilteredArray] = useState<FoodItem[]>([]);
+const FoodList = () => {
+  const [foodList, setFoodList] = useState<FoodItem[]>(food);
+  const { searchValue, foodItems } = useAppSelector((state) => state.meal);
+  const dispatch = useAppDispatch();
 
   const handleChecked = (id: number) => {
-    const foodArray = [...filteredArray];
+    const foodArray = [...foodList];
     const foodIndex = foodArray.findIndex((foodItem) => foodItem.id === id);
-    foodArray[foodIndex].checked = !foodArray[foodIndex].checked;
-    setFilteredArray(foodArray);
+    foodArray[foodIndex] = {
+      ...foodArray[foodIndex],
+      checked: !foodArray[foodIndex].checked,
+    };
+    setFoodList(foodArray);
   };
 
+  // console.log(foodItems)
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setFilteredArray(food.filter((item) => item.foodName.includes(search)));
-    }, 200);
-    return () => clearTimeout(timer);
-  }, [search]);
-  
+      const foodItems = foodList.filter(
+        (foodItem) => foodItem.checked === true
+      );
+      dispatch(setFoodItems(foodItems));
+  }, [foodList]);
+
+  // console.log(foodList);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setFoodList(food.filter((item) => item.foodName.includes(search)));
+  //   }, 200);
+  //   return () => clearTimeout(timer);
+  // }, [search]);
+
   return (
     <List>
-      {filteredArray.map(
+      {foodList.map(
         (
           {
             foodName,
@@ -59,7 +97,9 @@ const FoodList = ({ food, search }: FoodListProps) => {
             display="flex"
             padding={2}
             cursor="pointer"
-            boxShadow={"rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px"}
+            boxShadow={
+              'rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px'
+            }
             marginBottom={3}
             key={index}
             onClick={() => handleChecked(id)}
@@ -72,9 +112,7 @@ const FoodList = ({ food, search }: FoodListProps) => {
             />
             <Box flex={1}>
               <Badge
-                colorScheme={
-                  checked ? 'green' : 'blackAlpha'
-                }
+                colorScheme={checked ? 'green' : 'blackAlpha'}
                 variant="subtle"
                 w={'100%'}
                 padding="1.5"
@@ -115,10 +153,6 @@ const FoodList = ({ food, search }: FoodListProps) => {
       )}
     </List>
   );
-};
-
-FoodList.propTypes = {
-  food: PropTypes.array.isRequired,
 };
 
 export default FoodList;

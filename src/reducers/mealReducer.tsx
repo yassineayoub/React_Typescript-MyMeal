@@ -1,12 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import Food from '../components/Food/Food';
 
 // Define a type for the slice state
 interface MealState {
   mealCount: number;
   meals: Meal[];
-  food: FoodItem[]
+  foodItems: FoodItem[];
+  searchValue: string;
 }
-
+export type Meal = {
+  name: string;
+  index: number;
+  food: FoodItem[];
+  checked?: boolean;
+};
 export type FoodItem = {
   id: number;
   foodName: string;
@@ -18,18 +25,12 @@ export type FoodItem = {
   checked?: boolean;
 };
 
-export type Meal = {
-  name: string;
-  index: number;
-  food?: object[];
-  checked?: boolean;
-};
-
 // Define the initial state using that type
 const initialState: MealState = {
+  searchValue: '',
   mealCount: 1,
   meals: [],
-  food: [],
+  foodItems: [],
 };
 
 export const mealReducer = createSlice({
@@ -51,6 +52,9 @@ export const mealReducer = createSlice({
     incrementByAmount: (state, action: PayloadAction<number>) => {
       state.mealCount = action.payload;
     },
+    setSearchValue: (state, action: PayloadAction<string>) => {
+      state.searchValue = action.payload;
+    },
     setMealName: (state, action: PayloadAction<Meal>) => {
       const { index } = action.payload;
       const mealArray = [...state.meals];
@@ -66,6 +70,16 @@ export const mealReducer = createSlice({
       mealArray[index].checked = bool;
       state.meals = mealArray;
     },
+    setFoodItems: (state, action: PayloadAction<FoodItem[]>) => {
+      state.foodItems = action.payload;
+    },
+    insertFoodItemsToMeal: (state) => {
+      state.meals.forEach((meal) => {
+        if (meal.checked) {
+          meal.food = [...meal.food, ...state.foodItems];
+        }
+      });
+    },
   },
 });
 
@@ -76,6 +90,9 @@ export const {
   incrementByAmount,
   setMealName,
   setIsChecked,
+  setFoodItems,
+  setSearchValue,
+  insertFoodItemsToMeal,
 } = mealReducer.actions;
 
 export default mealReducer.reducer;

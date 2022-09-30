@@ -5,7 +5,6 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 const FoodCheckBox = () => {
   const { meals } = useAppSelector((state) => state.meal);
   const dispatch = useAppDispatch();
-  console.log(meals)
 
   return (
     <Stack spacing={5} direction="column" alignItems="center">
@@ -20,6 +19,7 @@ const FoodCheckBox = () => {
             }
             value={meal.name}
             isChecked={meal.checked}
+            checked={meal.checked}
             key={meal.index}
             colorScheme="red"
           >

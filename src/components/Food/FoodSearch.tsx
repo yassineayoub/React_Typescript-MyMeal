@@ -1,12 +1,24 @@
 import { FormControl, FormLabel, IconButton, Input, Select } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { setSearchValue } from '../../reducers/mealReducer';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
-type FoodSearchProps = {
-  search: string,
-  setSearch: (e: string) => void
-}
 
-const FoodSearch = ({ search, setSearch }: FoodSearchProps) => {
+
+const FoodSearch = () => {
+  const dispatch = useAppDispatch();
+  const [search, setSearch] = useState('')
+  const { searchValue } = useAppSelector((state) => state.meal)
+  const handleChangeSearch = (search: string) => {
+    setSearch(search)
+  }
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      dispatch(setSearchValue(search))
+    }, 250);
+    return () => clearTimeout(timer)
+  }, [search])
 
   return (
     <FormControl>
@@ -14,7 +26,7 @@ const FoodSearch = ({ search, setSearch }: FoodSearchProps) => {
       <Input
         id="findAliment"
         value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={(e) => handleChangeSearch(e.target.value)}
       />
       {/* <IconButton></IconButton> */}
     </FormControl>
