@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 // Define a type for the slice state
 interface MealState {
@@ -9,6 +9,7 @@ export type Meal = {
   name: string;
   index: number;
   food?: object[];
+  checked?: boolean;
 };
 
 // Define the initial state using that type
@@ -18,7 +19,7 @@ const initialState: MealState = {
 };
 
 export const mealReducer = createSlice({
-  name: "meal",
+  name: 'meal',
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
@@ -42,11 +43,25 @@ export const mealReducer = createSlice({
       mealArray[index] = { ...mealArray[index], ...action.payload };
       state.meals = mealArray;
     },
+    setIsChecked: (
+      state,
+      action: PayloadAction<{ index: number; bool: boolean }>
+    ) => {
+      const { index, bool } = action.payload;
+      const mealArray = [...state.meals];
+      mealArray[index].checked = bool;
+      state.meals = mealArray;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount, setMealName } =
-  mealReducer.actions;
+export const {
+  increment,
+  decrement,
+  incrementByAmount,
+  setMealName,
+  setIsChecked,
+} = mealReducer.actions;
 
 export default mealReducer.reducer;

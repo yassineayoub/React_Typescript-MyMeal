@@ -1,4 +1,4 @@
-import { FormControl, FormLabel, Input, Select } from '@chakra-ui/react';
+import { FormControl, FormLabel, IconButton, Input, Select } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
 type FoodSearchProps = {
@@ -16,6 +16,7 @@ const FoodSearch = ({ search, setSearch }: FoodSearchProps) => {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
+      {/* <IconButton></IconButton> */}
     </FormControl>
   );
 };

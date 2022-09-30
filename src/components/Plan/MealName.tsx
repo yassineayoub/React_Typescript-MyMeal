@@ -10,7 +10,6 @@ type MealNameProps = {
 const MealName = ({ index }: MealNameProps) => {
   const meals = useAppSelector((state) => state.meal.meals);
   const dispatch = useAppDispatch();
-  const [mealObj, setMealObj] = useState<Meal>({ name: '', index: index });
     console.log(meals)
   return (
     <FormControl isRequired>
@@ -18,7 +17,7 @@ const MealName = ({ index }: MealNameProps) => {
       <Input
         id={`Repas ${index + 1}`}
         placeholder="Entrez un nom"
-        value={meals[index] ? meals[index].name : mealObj.name}
+        value={meals[index] ? meals[index].name : ''}
         onChange={(e) =>
           dispatch(setMealName({ name: e.target.value, index: index }))
         }
