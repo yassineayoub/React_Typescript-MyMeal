@@ -79,6 +79,7 @@ export const mealReducer = createSlice({
           meal.food = [...meal.food, ...state.foodItems];
         }
       });
+      state.foodItems = [];
     },
   },
 });

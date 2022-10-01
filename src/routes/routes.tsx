@@ -23,4 +23,13 @@ export const router = createBrowserRouter([
       </>
     ),
   },
+  {
+    path: '/meal/:mealId',
+    element: (
+      <>
+        <Header />
+        <Food />
+      </>
+    ),
+  },
 ]);

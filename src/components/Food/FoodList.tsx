@@ -51,7 +51,7 @@ const FoodList = () => {
     (state) => state.meal
   );
   const dispatch = useAppDispatch();
-
+ 
   const checkedMeals = meals.filter((meal) => meal.checked === true);
   console.log(checkedMeals);
 
@@ -71,8 +71,6 @@ const FoodList = () => {
     }
     return true;
   };
-
-  console.log(isCheckedFood(checkedMeals, 'foodName', 2));
 
   const handleChecked = (id: number) => {
     const foodArray = [...foodList];
@@ -130,9 +128,7 @@ const FoodList = () => {
             <ListIcon
               as={
                 (
-                  isCheckedFood(checkedMeals, foodName, id)
-                    ? isCheckedFood(checkedMeals, foodName, id)
-                    : checked
+                  isCheckedFood(checkedMeals, foodName, id) && checked
                 )
                   ? CheckIcon
                   : SmallAddIcon
@@ -149,7 +145,7 @@ const FoodList = () => {
                       ? isCheckedFood(checkedMeals, foodName, id)
                       : checked
                   )
-                    ? 'green'
+                    ? 'blue'
                     : 'blackAlpha'
                 }
                 variant="subtle"
