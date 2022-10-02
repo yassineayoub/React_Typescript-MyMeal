@@ -1,5 +1,5 @@
 import { Box, Button, FormControl, Stack } from '@chakra-ui/react';
-import { CheckIcon } from '@chakra-ui/icons';
+import { CheckIcon, PlusSquareIcon } from '@chakra-ui/icons';
 import { useAppSelector } from '../../store/hooks';
 import { Link as RouterLink } from 'react-router-dom';
 import MealCounter from './MealCounter';
@@ -32,25 +32,21 @@ const Plan = () => {
       gap={5}
     >
       <MealCounter />
-      <form onSubmit={handleSubmitForm}>
-        <FormControl>
           {rows.map((v, index) => (
-            <MealName key={index} index={index} />
+            <>
+              <MealName index={index} />
+            </>
           ))}
-      
-            <Button
-              to={'/food'}
-              as={RouterLink}
-              type="submit"
-              colorScheme="green"
-              margin={5}
-              rightIcon={<CheckIcon />}
-            >
-              Suivant
-            </Button>
-       
-        </FormControl>
-      </form>
+          <Button
+          as={RouterLink}
+          to={'/mymeal'}
+          type="submit"
+          colorScheme="green"
+          marginTop={5}
+          // rightIcon={<CheckIcon />}
+        >
+          Mon Plan
+        </Button>
     </Box>
   );
 };

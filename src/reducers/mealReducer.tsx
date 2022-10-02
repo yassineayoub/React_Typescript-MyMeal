@@ -73,12 +73,35 @@ export const mealReducer = createSlice({
     setFoodItems: (state, action: PayloadAction<FoodItem[]>) => {
       state.foodItems = action.payload;
     },
+    insertToFoodItemToMeal: (
+      state,
+      action: PayloadAction<{ mealId: number; foodItem: FoodItem }>
+    ) => {
+      const { mealId, foodItem } = action.payload;
+      const meal = state.meals[mealId];
+
+      // if (state.meals[mealId].food.length > 0) {
+        const copy = [...meal.food];
+        const index = copy.findIndex((item) => item.id === foodItem.id);
+        // TODO index = 0 bug
+        if (index !== -1) {
+          const newFoodList = copy.filter(
+            (item) => item.id !== copy[index].id
+          );
+          meal.food = newFoodList;
+        // }
+      } else {
+        meal.food = [...meal.food, action.payload.foodItem];
+      }
+      console.log(meal);
+    },
     insertFoodItemsToMeal: (state) => {
       state.meals.forEach((meal) => {
         if (meal.checked) {
           meal.food = [...meal.food, ...state.foodItems];
         }
       });
+      state.foodItems = [];
     },
   },
 });
@@ -93,6 +116,7 @@ export const {
   setFoodItems,
   setSearchValue,
   insertFoodItemsToMeal,
+  insertToFoodItemToMeal,
 } = mealReducer.actions;
 
 export default mealReducer.reducer;

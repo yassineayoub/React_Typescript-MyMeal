@@ -1,10 +1,21 @@
-import PropTypes from 'prop-types';
-import { Badge, Box, List, ListIcon, ListItem, Stack } from '@chakra-ui/react';
-import { CheckIcon, SmallAddIcon } from '@chakra-ui/icons';
+import {
+  Badge,
+  Box,
+  Button,
+  List,
+  ListIcon,
+  ListItem,
+  Stack,
+} from '@chakra-ui/react';
+import { MinusIcon, AddIcon } from '@chakra-ui/icons';
 import React, { useEffect, useState } from 'react';
-import { FoodItem, Meal, setFoodItems } from '../../reducers/mealReducer';
+import {
+  FoodItem,
+  insertToFoodItemToMeal,
+  setFoodItems,
+} from '../../reducers/mealReducer';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { m } from 'framer-motion';
+import { useParams } from 'react-router-dom';
 
 const food = [
   {
@@ -47,32 +58,28 @@ const food = [
 
 const FoodList = () => {
   const [foodList, setFoodList] = useState<FoodItem[]>(food);
-  const { searchValue, foodItems, meals } = useAppSelector(
-    (state) => state.meal
-  );
+  const [mealIndex, setMealIndex] = useState<number>(0);
+  const { searchValue, meals } = useAppSelector((state) => state.meal);
   const dispatch = useAppDispatch();
+  const params = useParams();
+  const { mealId } = params;
 
-  const checkedMeals = meals.filter((meal) => meal.checked === true);
-  console.log(checkedMeals);
+  useEffect(() => {
+    if (mealId) {
+      setMealIndex(+mealId);
+    }
+  }, []);
 
-  const isCheckedFood = (
-    checkedMeals: Meal[],
-    foodName: string,
-    id: number
-  ) => {
-    const value = checkedMeals.map((meal) =>
-      meal.food.findIndex(
-        (foodItem) => foodItem.foodName === foodName && foodItem.id === id
-      )
+  const isCheckedFood = (mealIndex: number, foodName: string, id: number) => {
+    const value = meals[mealIndex].food.findIndex(
+      (meal) => meal.foodName === foodName && meal.id === id
     );
     // If -1, means there is a meal where the food doesn't exist
-    if (value.includes(-1) || checkedMeals.length === 0) {
+    if (value === -1) {
       return false;
     }
     return true;
   };
-
-  console.log(isCheckedFood(checkedMeals, 'foodName', 2));
 
   const handleChecked = (id: number) => {
     const foodArray = [...foodList];
@@ -82,9 +89,16 @@ const FoodList = () => {
       checked: !foodArray[foodIndex].checked,
     };
     setFoodList(foodArray);
+    if (mealId) {
+      dispatch(
+        insertToFoodItemToMeal({
+          mealId: +mealId,
+          foodItem: foodArray[foodIndex],
+        })
+      );
+    }
   };
 
-  // console.log(foodItems)
   useEffect(() => {
     const foodItems = foodList.filter((foodItem) => foodItem.checked === true);
     dispatch(setFoodItems(foodItems));
@@ -114,80 +128,95 @@ const FoodList = () => {
           }: FoodItem,
           index: number
         ) => (
-          <ListItem
-            flexDirection="row"
-            alignItems="center"
-            display="flex"
-            padding={2}
-            cursor="pointer"
-            boxShadow={
-              'rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px'
-            }
-            marginBottom={3}
+          <Stack
+            direction="row"
             key={index}
+            alignItems="center"
             onClick={() => handleChecked(id)}
           >
-            <ListIcon
-              as={
-                (
-                  isCheckedFood(checkedMeals, foodName, id)
-                    ? isCheckedFood(checkedMeals, foodName, id)
-                    : checked
-                )
-                  ? CheckIcon
-                  : SmallAddIcon
+            <ListItem
+              flexDirection="row"
+              alignItems="center"
+              display="flex"
+              padding={2}
+              flex={1}
+              cursor="pointer"
+              // boxShadow={
+              //   'rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px'
+              // }
+              boxShadow={
+                isCheckedFood(mealIndex, foodName, id) ? 'outline' : 'md'
               }
-              w={6}
-              h={6}
-              color="green.700"
-            />
-            <Box flex={1}>
-              <Badge
-                colorScheme={
-                  (
-                    isCheckedFood(checkedMeals, foodName, id)
-                      ? isCheckedFood(checkedMeals, foodName, id)
-                      : checked
-                  )
-                    ? 'green'
-                    : 'blackAlpha'
-                }
-                variant="subtle"
-                w={'100%'}
-                padding="1.5"
-                position="relative"
-              >
-                <Stack
-                  textAlign="center"
-                  display="flex"
-                  direction="row"
-                  justifyContent="center"
-                  spacing={10}
-                >
-                  <Box display="flex">{foodName}</Box>
-                  <Box
-                    sx={{ position: 'absolute', right: '3%' }}
-                  >{`/${serving}${unit}`}</Box>
-                </Stack>
-              </Badge>
-              <Stack direction="row" justifyContent="space-between">
+              rounded="lg"
+              marginBottom={3}
+            >
+              <Box flex={1}>
                 <Badge
-                  padding={0.5}
-                  alignItems="center"
-                  variant="solid"
-                  colorScheme="telegram"
+                  colorScheme={
+                    isCheckedFood(mealIndex, foodName, id)
+                      ? 'blue'
+                      : 'blackAlpha'
+                  }
+                  variant="subtle"
+                  w={'100%'}
+                  padding="1.5"
+                  position="relative"
+                  marginBottom="5px"
                 >
-                  Proteines: {protein}
+                  <Stack
+                    textAlign="center"
+                    display="flex"
+                    direction="row"
+                    justifyContent="center"
+                    spacing={10}
+                  >
+                    <Box display="flex">{foodName}</Box>
+                    <Box
+                      sx={{ position: 'absolute', right: '3%' }}
+                    >{`/${serving}${unit}`}</Box>
+                  </Stack>
                 </Badge>
-                <Badge variant="solid" colorScheme="orange">
-                  Glucides: {carbs}
-                </Badge>
-                <Badge variant="solid" colorScheme="red">
-                  Lipide: {fat}
-                </Badge>
-              </Stack>
-            </Box>
-          </ListItem>
+                <Stack direction="row" justifyContent="space-between">
+                  <Badge
+                    padding={0.5}
+                    alignItems="center"
+                    variant="solid"
+                    colorScheme="telegram"
+                  >
+                    Proteines: {protein}
+                  </Badge>
+                  <Badge variant="solid" colorScheme="orange">
+                    Glucides: {carbs}
+                  </Badge>
+                  <Badge variant="solid" colorScheme="red">
+                    Lipide: {fat}
+                  </Badge>
+                </Stack>
+              </Box>
+
+              <Button
+                marginLeft="6px"
+                flexDirection="column"
+                minWidth="80px"
+                padding="8px"
+                height="100%"
+                leftIcon={
+                  isCheckedFood(mealIndex, foodName, id) ? (
+                    <MinusIcon />
+                  ) : (
+                    <AddIcon />
+                  )
+                }
+                color={
+                  isCheckedFood(mealIndex, foodName, id)
+                    ? 'red.500'
+                    : 'green.500'
+                }
+              >
+                {isCheckedFood(mealIndex, foodName, id) ? 'Retirer' : 'Ajouter'}
+              </Button>
+            </ListItem>
+          </Stack>
         )
       )}
     </List>
