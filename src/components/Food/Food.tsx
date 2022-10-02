@@ -15,23 +15,88 @@ import FoodSearch from './FoodSearch';
 import { CheckIcon } from '@chakra-ui/icons';
 import FoodCheckBox from './FoodCheckBox';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { insertFoodItemsToMeal } from '../../reducers/mealReducer';
+import {
+  FoodItem,
+  insertFoodItemsToMeal,
+  insertToFoodItemToMeal,
+} from '../../reducers/mealReducer';
 import FoodMealName from './FoodMealName';
+import FoodListItem from './FoodListItem';
 
 export type CheckedMeal = {
   checkedMeal: object[];
 };
 
+const food = [
+  {
+    foodName: 'noisette',
+    protein: 10,
+    fat: 30,
+    carbs: 40,
+    id: 1,
+    serving: 100,
+    unit: 'g',
+  },
+  {
+    foodName: 'amande',
+    protein: 20,
+    fat: 34,
+    carbs: 35,
+    id: 2,
+    serving: 100,
+    unit: 'g',
+  },
+  {
+    foodName: 'amande',
+    protein: 20,
+    fat: 34,
+    carbs: 35,
+    id: 3,
+    serving: 100,
+    unit: 'g',
+  },
+  {
+    foodName: 'choux',
+    protein: 20,
+    fat: 34,
+    carbs: 35,
+    id: 4,
+    serving: 100,
+    unit: 'g',
+  },
+];
+
 const Food = () => {
   const [mealName, setMealName] = useState('');
+
+  const [foodList, setFoodList] = useState<FoodItem[]>(food);
+  const [mealIndex, setMealIndex] = useState<number>(0);
+  const { searchValue, meals } = useAppSelector((state) => state.meal);
   const dispatch = useAppDispatch();
-  const { meals, foodItems } = useAppSelector((state) => state.meal);
-  const handleDispatchSetFoodItems = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    dispatch(insertFoodItemsToMeal());
-    console.log("c'est ajouté boy");
+  const params = useParams();
+  const { mealId } = params;
+
+  const handleChecked = (id: number) => {
+    const foodArray = [...foodList];
+    const foodIndex = foodArray.findIndex((foodItem) => foodItem.id === id);
+    foodArray[foodIndex] = {
+      ...foodArray[foodIndex],
+      checked: !foodArray[foodIndex].checked,
+    };
+    setFoodList(foodArray);
+    dispatch(
+      insertToFoodItemToMeal({
+        mealIndex: mealIndex,
+        foodItem: foodArray[foodIndex],
+      })
+    );
   };
-  const { mealId } = useParams();
+
+  useEffect(() => {
+    if (mealId) {
+      setMealIndex(+mealId);
+    }
+  }, []);
 
   useEffect(() => {
     if (mealId) {
@@ -52,12 +117,24 @@ const Food = () => {
     >
       <FoodMealName name={mealName} />
       <FoodSearch />
-      <FoodList />
+      <FoodList food={food} mealIndex={mealIndex} />
       <Text>Mes aliments selectionnées :</Text>
       <List>
         {mealId
-          ? meals[+mealId].food.map((foodItem) => (
-              <ListItem key={foodItem.id}>{foodItem.foodName}</ListItem>
+          ? meals[mealIndex].food.map((foodItem, index) => (
+              <Stack
+                direction="row"
+                key={index}
+                alignItems="center"
+                onClick={() => handleChecked(foodItem.id)}
+              >
+                <FoodListItem
+                  meals={meals}
+                  foodItem={foodItem}
+                  mealIndex={mealIndex}
+                  key={mealIndex}
+                />
+              </Stack>
             ))
           : ''}
       </List>

@@ -75,15 +75,13 @@ export const mealReducer = createSlice({
     },
     insertToFoodItemToMeal: (
       state,
-      action: PayloadAction<{ mealId: number; foodItem: FoodItem }>
+      action: PayloadAction<{ mealIndex: number; foodItem: FoodItem }>
     ) => {
-      const { mealId, foodItem } = action.payload;
-      const meal = state.meals[mealId];
+      const { mealIndex, foodItem } = action.payload;
+      const meal = state.meals[mealIndex];
 
-      // if (state.meals[mealId].food.length > 0) {
         const copy = [...meal.food];
         const index = copy.findIndex((item) => item.id === foodItem.id);
-        // TODO index = 0 bug
         if (index !== -1) {
           const newFoodList = copy.filter(
             (item) => item.id !== copy[index].id
