@@ -16,6 +16,7 @@ import {
 } from '../../reducers/mealReducer';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { useParams } from 'react-router-dom';
+import FoodListItem from './FoodListItem';
 
 const food = [
   {
@@ -70,17 +71,6 @@ const FoodList = () => {
     }
   }, []);
 
-  const isCheckedFood = (mealIndex: number, foodName: string, id: number) => {
-    const value = meals[mealIndex].food.findIndex(
-      (meal) => meal.foodName === foodName && meal.id === id
-    );
-    // If -1, means there is a meal where the food doesn't exist
-    if (value === -1) {
-      return false;
-    }
-    return true;
-  };
-
   const handleChecked = (id: number) => {
     const foodArray = [...foodList];
     const foodIndex = foodArray.findIndex((foodItem) => foodItem.id === id);
@@ -114,27 +104,20 @@ const FoodList = () => {
 
   return (
     <List>
-      {foodList.map(
-        (
-          {
-            foodName,
-            protein,
-            carbs,
-            fat,
-            id,
-            checked,
-            serving,
-            unit,
-          }: FoodItem,
-          index: number
-        ) => (
+      {searchValue &&
+        foodList.map((foodItem: FoodItem, index: number) => (
           <Stack
             direction="row"
             key={index}
             alignItems="center"
-            onClick={() => handleChecked(id)}
+            onClick={() => handleChecked(foodItem.id)}
           >
-            <ListItem
+            <FoodListItem
+              meals={meals}
+              foodItem={foodItem}
+              mealIndex={mealIndex}
+            />
+            {/* <ListItem
               flexDirection="row"
               alignItems="center"
               display="flex"
@@ -215,10 +198,9 @@ const FoodList = () => {
               >
                 {isCheckedFood(mealIndex, foodName, id) ? 'Retirer' : 'Ajouter'}
               </Button>
-            </ListItem>
+            </ListItem> */}
           </Stack>
-        )
-      )}
+        ))}
     </List>
   );
 };
