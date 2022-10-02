@@ -1,10 +1,16 @@
 import PropTypes from 'prop-types';
 import { Badge, Box, List, ListIcon, ListItem, Stack } from '@chakra-ui/react';
-import { CheckIcon, SmallAddIcon } from '@chakra-ui/icons';
+import { MinusIcon, AddIcon } from '@chakra-ui/icons';
 import React, { useEffect, useState } from 'react';
-import { FoodItem, Meal, setFoodItems } from '../../reducers/mealReducer';
+import {
+  FoodItem,
+  insertToFoodItemToMeal,
+  Meal,
+  setFoodItems,
+} from '../../reducers/mealReducer';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { m } from 'framer-motion';
+import { useParams } from 'react-router-dom';
 
 const food = [
   {
@@ -47,26 +53,27 @@ const food = [
 
 const FoodList = () => {
   const [foodList, setFoodList] = useState<FoodItem[]>(food);
+  const [mealIndex, setMealIndex] = useState<number>(0);
   const { searchValue, foodItems, meals } = useAppSelector(
     (state) => state.meal
   );
   const dispatch = useAppDispatch();
- 
-  const checkedMeals = meals.filter((meal) => meal.checked === true);
-  console.log(checkedMeals);
+  const params = useParams();
+  const { mealId } = params;
+  
+  useEffect(() => {
+    if (mealId) {
+      setMealIndex(+mealId)
+    }
+  } , [])
 
-  const isCheckedFood = (
-    checkedMeals: Meal[],
-    foodName: string,
-    id: number
-  ) => {
-    const value = checkedMeals.map((meal) =>
-      meal.food.findIndex(
-        (foodItem) => foodItem.foodName === foodName && foodItem.id === id
-      )
+
+  const isCheckedFood = (mealIndex: number, foodName: string, id: number) => {
+    const value = meals[mealIndex].food.findIndex(
+      (meal) => meal.foodName === foodName && meal.id === id
     );
     // If -1, means there is a meal where the food doesn't exist
-    if (value.includes(-1) || checkedMeals.length === 0) {
+    if (value === -1) {
       return false;
     }
     return true;
@@ -80,9 +87,16 @@ const FoodList = () => {
       checked: !foodArray[foodIndex].checked,
     };
     setFoodList(foodArray);
+    if (mealId) {
+      dispatch(
+        insertToFoodItemToMeal({
+          mealId: +mealId,
+          foodItem: foodArray[foodIndex],
+        })
+      );
+    }
   };
 
-  // console.log(foodItems)
   useEffect(() => {
     const foodItems = foodList.filter((foodItem) => foodItem.checked === true);
     dispatch(setFoodItems(foodItems));
@@ -127,24 +141,19 @@ const FoodList = () => {
           >
             <ListIcon
               as={
-                (
-                  isCheckedFood(checkedMeals, foodName, id) && checked
-                )
-                  ? CheckIcon
-                  : SmallAddIcon
+                isCheckedFood(mealIndex, foodName, id)
+                  ? MinusIcon
+                  : AddIcon
               }
               w={6}
               h={6}
-              color="green.700"
+              color={isCheckedFood(mealIndex, foodName, id) ? "red.500" : "green.500"}
             />
             <Box flex={1}>
               <Badge
                 colorScheme={
-                  (
-                    isCheckedFood(checkedMeals, foodName, id)
-                      ? isCheckedFood(checkedMeals, foodName, id)
-                      : checked
-                  )
+                  
+                    isCheckedFood(mealIndex, foodName, id)
                     ? 'blue'
                     : 'blackAlpha'
                 }

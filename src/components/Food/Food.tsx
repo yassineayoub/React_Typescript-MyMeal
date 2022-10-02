@@ -1,4 +1,13 @@
-import { Box, Button, FormControl, Link, Stack } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  FormControl,
+  Link,
+  List,
+  ListItem,
+  Stack,
+  Text,
+} from '@chakra-ui/react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import FoodList from './FoodList';
@@ -7,29 +16,29 @@ import { CheckIcon } from '@chakra-ui/icons';
 import FoodCheckBox from './FoodCheckBox';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { insertFoodItemsToMeal } from '../../reducers/mealReducer';
+import FoodMealName from './FoodMealName';
 
 export type CheckedMeal = {
   checkedMeal: object[];
 };
 
 const Food = () => {
-  const [mealName, setMealName] = useState('')
+  const [mealName, setMealName] = useState('');
   const dispatch = useAppDispatch();
-  const { meals } = useAppSelector((state) => state.meal)
+  const { meals, foodItems } = useAppSelector((state) => state.meal);
   const handleDispatchSetFoodItems = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(insertFoodItemsToMeal())
-    console.log("c'est ajouté boy")
+    dispatch(insertFoodItemsToMeal());
+    console.log("c'est ajouté boy");
   };
   const { mealId } = useParams();
 
- useEffect(() => {
-   if (mealId) {
-    const mealIndex = + mealId
-    setMealName(meals[mealIndex].name)
-   }
- }, [mealId])
- 
+  useEffect(() => {
+    if (mealId) {
+      const mealIndex = +mealId;
+      setMealName(meals[mealIndex].name);
+    }
+  }, [mealId]);
 
   return (
     <Box
@@ -41,11 +50,20 @@ const Food = () => {
       textAlign="center"
       gap={5}
     >
+      <FoodMealName name={mealName} />
       <FoodSearch />
       <FoodList />
+      <Text>Mes aliments selectionnées :</Text>
+      <List>
+        {mealId
+          ? meals[+mealId].food.map((foodItem) => (
+              <ListItem key={foodItem.id}>{foodItem.foodName}</ListItem>
+            ))
+          : ''}
+      </List>
       <form onSubmit={(e) => handleDispatchSetFoodItems(e)}>
         <FormControl>
-          <FoodCheckBox />
+          {/* <FoodCheckBox /> */}
           <Button
             type="submit"
             colorScheme="blue"
