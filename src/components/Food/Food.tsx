@@ -61,29 +61,16 @@ const Food = () => {
             ))
           : ''}
       </List>
-      <form onSubmit={(e) => handleDispatchSetFoodItems(e)}>
-        <FormControl>
-          {/* <FoodCheckBox /> */}
-          <Button
-            type="submit"
-            colorScheme="blue"
-            marginTop={5}
-            rightIcon={<CheckIcon />}
-          >
-            Ajouter
-          </Button>
-        </FormControl>
-      </form>
       <Stack margin="auto">
         <Button
           as={RouterLink}
-          to={'/'}
+          to={'/mymeal'}
           type="submit"
-          colorScheme="green"
+          colorScheme="blue"
           marginTop={5}
           rightIcon={<CheckIcon />}
         >
-          Précédent
+          Valider
         </Button>
         <Button
           as={RouterLink}

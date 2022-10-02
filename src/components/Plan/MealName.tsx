@@ -4,6 +4,7 @@ import {
   FormErrorMessage,
   FormLabel,
   Input,
+  Stack,
 } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
@@ -45,8 +46,10 @@ const MealName = ({ index }: MealNameProps) => {
   };
   console.log(isInvalid);
   return (
+    // TODO Ajouter un bouton qui blur l'input une fois le nom du repas ajouté
     <FormControl isRequired isInvalid={isInvalid}>
       <FormLabel htmlFor={`Repas ${index + 1}`}>Repas {index + 1}</FormLabel>
+      <Stack>
       <Input
         id={`Repas ${index + 1}`}
         placeholder="Entrez un nom"
@@ -64,8 +67,9 @@ const MealName = ({ index }: MealNameProps) => {
         rightIcon={<PlusSquareIcon h={10} w={10} />}
         onClick={handleClick}
       >
-        Ajouter des aliments
+        Ajouter ou voir mes aliments
       </Button>
+      </Stack>
     </FormControl>
   );
 };

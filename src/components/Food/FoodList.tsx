@@ -141,9 +141,13 @@ const FoodList = () => {
               padding={2}
               flex={1}
               cursor="pointer"
+              // boxShadow={
+              //   'rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px'
+              // }
               boxShadow={
-                'rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px'
+                isCheckedFood(mealIndex, foodName, id) ? 'outline' : 'md'
               }
+              rounded="lg"
               marginBottom={3}
             >
               <Box flex={1}>
@@ -191,7 +195,7 @@ const FoodList = () => {
               </Box>
 
               <Button
-              marginLeft="6px"
+                marginLeft="6px"
                 flexDirection="column"
                 minWidth="80px"
                 padding="8px"

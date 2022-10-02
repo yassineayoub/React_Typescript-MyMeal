@@ -37,6 +37,16 @@ const Plan = () => {
               <MealName index={index} />
             </>
           ))}
+          <Button
+          as={RouterLink}
+          to={'/mymeal'}
+          type="submit"
+          colorScheme="green"
+          marginTop={5}
+          // rightIcon={<CheckIcon />}
+        >
+          Mon Plan
+        </Button>
     </Box>
   );
 };
