@@ -42,7 +42,7 @@ const Food = () => {
 
   return (
     <Box
-      w={['90%', '60%', '40%']}
+      w={['95%', '60%', '40%']}
       display="flex"
       flexDirection="column"
       justifyContent="center"
