@@ -5,6 +5,7 @@ import Food from '../components/Food/Food';
 interface MealState {
   mealCount: number;
   meals: Meal[];
+  myMeal: Meal[];
   foodItems: FoodItem[];
   searchValue: string;
 }
@@ -23,6 +24,7 @@ export type FoodItem = {
   serving: number;
   unit: string;
   checked?: boolean;
+  updatedServing?: number
 };
 
 // Define the initial state using that type
@@ -30,6 +32,7 @@ const initialState: MealState = {
   searchValue: '',
   mealCount: 1,
   meals: [],
+  myMeal: [],
   foodItems: [],
 };
 
@@ -59,7 +62,7 @@ export const mealReducer = createSlice({
       const { index } = action.payload;
       const mealArray = [...state.meals];
       mealArray[index] = { ...mealArray[index], ...action.payload };
-      state.meals = mealArray;
+      state.meals = state.myMeal = mealArray;
     },
     setIsChecked: (
       state,
@@ -68,32 +71,36 @@ export const mealReducer = createSlice({
       const { index, bool } = action.payload;
       const mealArray = [...state.meals];
       mealArray[index].checked = bool;
-      state.meals = mealArray;
+      state.meals = state.myMeal = mealArray;
     },
     setFoodItems: (state, action: PayloadAction<FoodItem[]>) => {
       state.foodItems = action.payload;
     },
     insertToFoodItemToMeal: (
       state,
-      action: PayloadAction<{ mealId: number; foodItem: FoodItem }>
+      action: PayloadAction<{ mealIndex: number; foodItem: FoodItem }>
     ) => {
-      const { mealId, foodItem } = action.payload;
-      const meal = state.meals[mealId];
+      const { mealIndex, foodItem } = action.payload;
+      const meal = state.meals[mealIndex];
+      const myMeal = state.myMeal[mealIndex];
 
-      // if (state.meals[mealId].food.length > 0) {
-        const copy = [...meal.food];
-        const index = copy.findIndex((item) => item.id === foodItem.id);
-        // TODO index = 0 bug
-        if (index !== -1) {
-          const newFoodList = copy.filter(
-            (item) => item.id !== copy[index].id
-          );
-          meal.food = newFoodList;
+      const copy = [...meal.food];
+      const copyMyMeal = [...myMeal.food];
+
+      const index = copy.findIndex((item) => item.id === foodItem.id);
+
+      if (index !== -1) {
+        const newFoodList = copy.filter((item) => item.id !== copy[index].id);
+        meal.food = newFoodList;
+        const newFoodListMyMeal = copyMyMeal.filter(
+          (item) => item.id !== copyMyMeal[index].id
+        );
+        myMeal.food = newFoodListMyMeal;
         // }
       } else {
         meal.food = [...meal.food, action.payload.foodItem];
+        myMeal.food = [...myMeal.food, action.payload.foodItem];
       }
-      console.log(meal);
     },
     insertFoodItemsToMeal: (state) => {
       state.meals.forEach((meal) => {
@@ -102,6 +109,21 @@ export const mealReducer = createSlice({
         }
       });
       state.foodItems = [];
+    },
+    // setMyMeal: (state, action: PayloadAction<Meal[]>) => {
+    //   state.myMeal = action.payload;
+    // },
+    setUpdatedFoodItem: (
+      state,
+      action: PayloadAction<{
+        mealIndex: number;
+        updatedFoodItem: FoodItem;
+        foodItemIndex: number;
+      }>
+    ) => {
+      const { mealIndex, updatedFoodItem, foodItemIndex } = action.payload;
+      console.log(state.myMeal[mealIndex].food);
+      state.myMeal[mealIndex].food[foodItemIndex] = updatedFoodItem;
     },
   },
 });
@@ -117,6 +139,8 @@ export const {
   setSearchValue,
   insertFoodItemsToMeal,
   insertToFoodItemToMeal,
+  // setMyMeal,
+  setUpdatedFoodItem,
 } = mealReducer.actions;
 
 export default mealReducer.reducer;
