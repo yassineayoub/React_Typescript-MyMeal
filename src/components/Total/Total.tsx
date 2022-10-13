@@ -11,7 +11,7 @@ const Total = () => {
   const { meals, myMeal } = useAppSelector((state) => state.meal);
   const dispatch = useAppDispatch();
   const [myMeals, setUpdatedMeals] = useState(meals);
-  const [amount, setAmount] = useState<number>(0);
+  const [amount, setAmount] = useState<string | null>();
 
   useEffect(() => {
     setUpdatedMeals(myMeal);
@@ -22,6 +22,7 @@ const Total = () => {
     mealIndex: number,
     foodItem: FoodItem
   ) => {
+    setAmount(amount.toString());
     if (amount > 0) {
       const updatedItem = { ...foodItem };
       console.log(foodItem.serving);
@@ -31,7 +32,7 @@ const Total = () => {
       updatedItem.protein =
         amount * (updatedItem.protein / updatedItem.serving);
       updatedItem.serving = amount;
-      setAmount(amount);
+   
       // setUpdate()
       const updatedMeals = [...myMeals];
       const foodItemIndex = updatedMeals[mealIndex].food.findIndex(
@@ -67,7 +68,8 @@ const Total = () => {
               <FoodCard foodItem={foodItem} mealIndex={index} />
               <Input
                 type="number"
-                value={foodItem.serving}
+                inputMode="numeric"
+                value={amount ? amount.replace(/^0+/,'') : foodItem.serving.toString().replace(/^0+/,'')}
                 onChange={(e) =>
                   handleSetAmount(+e.target.value, index, foodItem)
                 }
