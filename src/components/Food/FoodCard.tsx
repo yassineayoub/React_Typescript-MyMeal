@@ -49,13 +49,16 @@ const FoodCard = ({
           variant="solid"
           colorScheme="telegram"
         >
-          Proteines: {protein.toFixed(1)}
+          Proteines<br/>
+          {protein.toFixed(1) + ' ' + unit}
         </Badge>
         <Badge variant="solid" colorScheme="orange">
-          Glucides: {carbs.toFixed(1)}
+          Glucides<br/>
+          {carbs.toFixed(1) + ' ' + unit}
         </Badge>
         <Badge variant="solid" colorScheme="red">
-          Lipide: {fat.toFixed(1)}
+          Lipide<br/>
+          {fat.toFixed(1) + ' ' + unit}
         </Badge>
       </Stack>
     </Box>

@@ -26,7 +26,6 @@ const Total = () => {
     if (amount > 0) {
       const updatedItem = { ...foodItem };
       console.log(foodItem.serving);
-      // TODO revoir l'input value
       updatedItem.carbs = amount * (updatedItem.carbs / updatedItem.serving);
       updatedItem.fat = amount * (updatedItem.fat / updatedItem.serving);
       updatedItem.protein =
@@ -67,9 +66,12 @@ const Total = () => {
             <Stack key={foodItem.id} direction="row">
               <FoodCard foodItem={foodItem} mealIndex={index} />
               <Input
+              sx={{ width: '60px', padding: 1, textAlign: 'center' }}
                 type="number"
                 inputMode="numeric"
-                value={amount ? amount.replace(/^0+/,'') : foodItem.serving.toString().replace(/^0+/,'')}
+                value={amount 
+                ? amount.replace(/^0+/,'') 
+                : foodItem.serving.toString().replace(/^0+/,'')}
                 onChange={(e) =>
                   handleSetAmount(+e.target.value, index, foodItem)
                 }
