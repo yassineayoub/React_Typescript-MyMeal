@@ -4,6 +4,7 @@ import {
   FormControl,
   Link,
   List,
+  ListIcon,
   ListItem,
   Stack,
   Text,
@@ -13,7 +14,6 @@ import React, { useState, useEffect } from 'react';
 import FoodList from './FoodList';
 import FoodSearch from './FoodSearch';
 import { CheckIcon } from '@chakra-ui/icons';
-import FoodCheckBox from './FoodCheckBox';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
   FoodItem,
@@ -118,22 +118,31 @@ const Food = () => {
       <FoodMealName name={mealName} />
       <FoodSearch />
       <FoodList food={food} mealIndex={mealIndex} />
-      <Text>Mes aliments selectionnées :</Text>
+      <Text fontSize="xl">Mes aliments selectionnées :</Text>
       <List>
         {mealId
           ? meals[mealIndex].food.map((foodItem, index) => (
               <Stack
                 direction="row"
+                justifyContent="center"
                 key={index}
                 alignItems="center"
                 onClick={() => handleChecked(foodItem.id)}
               >
-                <FoodListItem
-                  meals={meals}
-                  foodItem={foodItem}
-                  mealIndex={mealIndex}
-                  key={mealIndex}
-                />
+                <List spacing={3} width="100%">
+                  <ListItem
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    
+                    }}
+                  >
+                    <ListIcon as={CheckIcon} color="green.500" />
+                    <Text fontSize="lg">{foodItem.foodName}</Text>
+                    <Button>Retirer</Button>
+                  </ListItem>
+                </List>
               </Stack>
             ))
           : ''}

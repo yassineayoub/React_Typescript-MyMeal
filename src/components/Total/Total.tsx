@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import FoodCard from '../Food/FoodCard';
 import FoodMealName from '../Food/FoodMealName';
 import { FoodItem, setUpdatedFoodItem } from '../../reducers/mealReducer';
+import { current } from '@reduxjs/toolkit';
 
 const Total = () => {
   const { meals, myMeal } = useAppSelector((state) => state.meal);
@@ -49,6 +50,24 @@ const Total = () => {
     }
   };
 
+  [
+    { prot: 0,
+      glu:0,
+      fat: 0
+    },
+
+  ]
+  type Empty = {
+    prot: number,
+    glu: number,
+    fat: number,
+  }
+  // const array = [];
+  // myMeal.forEach((meal) => meal.food.reduce(((initial: Empty, curr, next) => {
+  //   initial.fat += next.protein
+  // }, { prot: 0, glu: 0, fat: 0 })))
+    
+
   return (
     <Box
       w={['95%', '60%', '40%']}
@@ -62,7 +81,7 @@ const Total = () => {
       {myMeals.map(({ food, name, index }) => (
         <>
           <FoodMealName key={name} name={name} />
-          {food.map((foodItem) => (
+          {food.map((foodItem) => { return (
             <Stack key={foodItem.id} direction="row">
               <FoodCard foodItem={foodItem} mealIndex={index} />
               <Input
@@ -76,8 +95,10 @@ const Total = () => {
                   handleSetAmount(+e.target.value, index, foodItem)
                 }
               />
+              
             </Stack>
-          ))}
+            
+          )})}
           <Divider />
         </>
       ))}
