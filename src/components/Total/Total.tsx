@@ -7,12 +7,21 @@ import FoodCard from '../Food/FoodCard';
 import FoodMealName from '../Food/FoodMealName';
 import { FoodItem, setUpdatedFoodItem } from '../../reducers/mealReducer';
 import { current } from '@reduxjs/toolkit';
+import SubTotal from './SubTotal';
 
 const Total = () => {
   const { meals, myMeal } = useAppSelector((state) => state.meal);
   const dispatch = useAppDispatch();
   const [myMeals, setUpdatedMeals] = useState(meals);
   const [amount, setAmount] = useState<string | null>();
+
+  const test = myMeal.map((item) => item.food.reduce((arr, curr ) => {
+    arr.protein += curr.protein
+    arr.carbs += curr.carbs
+    arr.fat += curr.fat
+    return arr;
+  } ,{ protein: 0, carbs: 0, fat: 0 }))
+  console.log(test,test)
 
   useEffect(() => {
     setUpdatedMeals(myMeal);
@@ -62,11 +71,6 @@ const Total = () => {
     glu: number,
     fat: number,
   }
-  // const array = [];
-  // myMeal.forEach((meal) => meal.food.reduce(((initial: Empty, curr, next) => {
-  //   initial.fat += next.protein
-  // }, { prot: 0, glu: 0, fat: 0 })))
-    
 
   return (
     <Box
@@ -99,6 +103,7 @@ const Total = () => {
             </Stack>
             
           )})}
+          <SubTotal />
           <Divider />
         </>
       ))}
