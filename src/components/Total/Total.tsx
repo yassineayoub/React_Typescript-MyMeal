@@ -58,6 +58,7 @@ const Total = () => {
       );
     }
   };
+ 
 
   [
     { prot: 0,
@@ -85,16 +86,14 @@ const Total = () => {
       {myMeals.map(({ food, name, index }) => (
         <>
           <FoodMealName key={name} name={name} />
-          {food.map((foodItem) => { return (
+          {food.map((foodItem, i) => { return (
             <Stack key={foodItem.id} direction="row">
               <FoodCard foodItem={foodItem} mealIndex={index} />
               <Input
               sx={{ width: '60px', padding: 1, textAlign: 'center' }}
                 type="number"
                 inputMode="numeric"
-                value={amount 
-                ? amount.replace(/^0+/,'') 
-                : foodItem.serving.toString().replace(/^0+/,'')}
+                value={foodItem.serving.toString().replace(/^0+/,'')}
                 onChange={(e) =>
                   handleSetAmount(+e.target.value, index, foodItem)
                 }
@@ -102,11 +101,20 @@ const Total = () => {
               
             </Stack>
             
-          )})}
-          <SubTotal />
+            )})}
           <Divider />
+          <SubTotal index={index} />
         </>
       ))}
+      <Button
+          as={RouterLink}
+          to={'/'}
+          type="submit"
+          colorScheme="blue"
+          marginTop={5}
+        >
+          Mes repas
+        </Button>
     </Box>
   );
 };
