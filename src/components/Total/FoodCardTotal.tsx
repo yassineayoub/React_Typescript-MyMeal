@@ -42,7 +42,7 @@ const FoodCardTotal = ({
           >{`/${serving}${unit}`}</Box>
         </Stack>
       </Badge>
-      <Stack direction="row" justifyContent="space-between">
+      <Stack direction="row" justifyContent="space-around">
         <Badge
           padding={0.5}
           alignItems="center"

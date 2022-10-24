@@ -1,19 +1,17 @@
-import { Badge } from '@chakra-ui/react'
-import React from 'react'
+import { Badge } from '@chakra-ui/react';
+import React from 'react';
 
 type BadgeComponent = {
-  name: string,
-  color: string,
-  data: number,
-}
+  color: string;
+  data: number;
+};
 
-const BadgeComponent = ({ name, color, data }: BadgeComponent) => {
+const BadgeComponent = ({ color, data }: BadgeComponent) => {
   return (
     <Badge variant="solid" colorScheme={color}>
-          {name}<br/>
-          {data.toFixed(1)}
+      {data.toFixed(1)}
     </Badge>
-  )
-}
+  );
+};
 
 export default BadgeComponent;

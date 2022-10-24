@@ -28,7 +28,7 @@ const Total = () => {
 
   useEffect(() => {
     setUpdatedMeals(myMeal);
-  }, [myMeal]);
+  }, [myMeal, meals]);
 
   const handleSetAmount = (
     amount: number,
@@ -72,36 +72,48 @@ const Total = () => {
       justifyContent="center"
       margin="auto"
       textAlign="center"
-      gap={5}
+      gap={2}
     >
       {myMeals.map(({ food, name, index }) => (
-        <>
-          <FoodMealName key={name} name={name} />
-
-          <Stack direction="row" justifyContent="space-between" maxWidth="calc(100% - 70px)">
-            <Text>Protein</Text>
-            <Text>Glucides</Text>
-            <Text>Lipides</Text>
-          </Stack>
-          {food.map((foodItem, i) => {
-            return (
-              <Stack key={i} direction="row">
-                <FoodCardTotal foodItem={foodItem} mealIndex={index} />
-                <Input
-                  sx={{ width: '60px', padding: 1, textAlign: 'center' }}
-                  type="number"
-                  inputMode="numeric"
-                  value={foodItem.serving.toString().replace(/^0+/, '')}
-                  onChange={(e) =>
-                    handleSetAmount(+e.target.value, index, foodItem)
-                  }
-                />
-              </Stack>
-            );
-          })}
-          <Divider />
-          <SubTotal index={index} />
-        </>
+        <Box
+        sx={{
+          marginBottom: '1rem',
+          boxShadow:
+                'rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px',
+              padding: '1rem',
+            }}
+            key={index}
+            >
+            <FoodMealName name={name} />
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              maxWidth="calc(100% - 70px)"
+              fontWeight="bold"
+            >
+              <Text>Protein</Text>
+              <Text>Glucides</Text>
+              <Text>Lipides</Text>
+            </Stack>
+            {food.map((foodItem, i) => {
+              return (
+                <Stack key={i} direction="row">
+                  <FoodCardTotal foodItem={foodItem} mealIndex={index} />
+                  <Input
+                    sx={{ width: '60px', padding: 1, textAlign: 'center' }}
+                    type="number"
+                    inputMode="numeric"
+                    value={foodItem.serving.toString().replace(/^0+/, '')}
+                    onChange={(e) =>
+                      handleSetAmount(+e.target.value, index, foodItem)
+                    }
+                  />
+                </Stack>
+              );
+            })}
+            <Divider />
+            <SubTotal index={index} />
+          </Box>
       ))}
       <Button
         as={RouterLink}

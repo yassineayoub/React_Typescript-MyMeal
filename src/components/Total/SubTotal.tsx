@@ -1,4 +1,4 @@
-import { Badge } from '@chakra-ui/react';
+import { Badge, Box, Stack, Text } from '@chakra-ui/react';
 import React from 'react';
 import { useAppSelector } from '../../store/hooks';
 import BadgeComponent from '../UI/BadgeComponent';
@@ -22,23 +22,18 @@ const SubTotal = ({ index }: SubTotalProps) => {
   );
 
   return (
-    <div>
-      <BadgeComponent
-        name="proteines"
-        color="blue"
-        data={subtotal[index].protein}
-      />
-      <BadgeComponent
-        name="glucides"
-        color="orange"
-        data={subtotal[index].carbs}
-      />
-      <BadgeComponent
-        name="lipides"
-        color="red"
-        data={subtotal[index].fat}
-      />
-    </div>
+    <>
+      <Text margin={5}>TOTAL</Text>
+      <Stack
+        justifyContent="space-around"
+        direction="row"
+        maxWidth="calc(100% - 70px)"
+      >
+        <BadgeComponent color="blue" data={subtotal[index].protein} />
+        <BadgeComponent color="orange" data={subtotal[index].carbs} />
+        <BadgeComponent color="red" data={subtotal[index].fat} />
+      </Stack>
+    </>
   );
 };
 
