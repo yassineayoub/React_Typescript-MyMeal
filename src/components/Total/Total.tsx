@@ -1,13 +1,11 @@
 import { Box, Button, Divider, Input, Stack, Text } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import { CheckIcon } from '@chakra-ui/icons';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import FoodCard from '../Food/FoodCard';
 import FoodMealName from '../Food/FoodMealName';
 import { FoodItem, setUpdatedFoodItem } from '../../reducers/mealReducer';
-import { current } from '@reduxjs/toolkit';
 import SubTotal from './SubTotal';
+import FoodCardTotal from './FoodCardTotal';
 
 const Total = () => {
   const { meals, myMeal } = useAppSelector((state) => state.meal);
@@ -15,13 +13,18 @@ const Total = () => {
   const [myMeals, setUpdatedMeals] = useState(meals);
   const [amount, setAmount] = useState<string | null>();
 
-  const test = myMeal.map((item) => item.food.reduce((arr, curr ) => {
-    arr.protein += curr.protein
-    arr.carbs += curr.carbs
-    arr.fat += curr.fat
-    return arr;
-  } ,{ protein: 0, carbs: 0, fat: 0 }))
-  console.log(test,test)
+  const test = myMeal.map((item) =>
+    item.food.reduce(
+      (arr, curr) => {
+        arr.protein += curr.protein;
+        arr.carbs += curr.carbs;
+        arr.fat += curr.fat;
+        return arr;
+      },
+      { protein: 0, carbs: 0, fat: 0 }
+    )
+  );
+  console.log(test, test);
 
   useEffect(() => {
     setUpdatedMeals(myMeal);
@@ -41,7 +44,7 @@ const Total = () => {
       updatedItem.protein =
         amount * (updatedItem.protein / updatedItem.serving);
       updatedItem.serving = amount;
-   
+
       // setUpdate()
       const updatedMeals = [...myMeals];
       const foodItemIndex = updatedMeals[mealIndex].food.findIndex(
@@ -58,20 +61,8 @@ const Total = () => {
       );
     }
   };
- 
 
-  [
-    { prot: 0,
-      glu:0,
-      fat: 0
-    },
-
-  ]
-  type Empty = {
-    prot: number,
-    glu: number,
-    fat: number,
-  }
+  [{ prot: 0, glu: 0, fat: 0 }];
 
   return (
     <Box
@@ -86,35 +77,41 @@ const Total = () => {
       {myMeals.map(({ food, name, index }) => (
         <>
           <FoodMealName key={name} name={name} />
-          {food.map((foodItem, i) => { return (
-            <Stack key={foodItem.id} direction="row">
-              <FoodCard foodItem={foodItem} mealIndex={index} />
-              <Input
-              sx={{ width: '60px', padding: 1, textAlign: 'center' }}
-                type="number"
-                inputMode="numeric"
-                value={foodItem.serving.toString().replace(/^0+/,'')}
-                onChange={(e) =>
-                  handleSetAmount(+e.target.value, index, foodItem)
-                }
-              />
-              
-            </Stack>
-            
-            )})}
+
+          <Stack direction="row" justifyContent="space-between" maxWidth="calc(100% - 70px)">
+            <Text>Protein</Text>
+            <Text>Glucides</Text>
+            <Text>Lipides</Text>
+          </Stack>
+          {food.map((foodItem, i) => {
+            return (
+              <Stack key={i} direction="row">
+                <FoodCardTotal foodItem={foodItem} mealIndex={index} />
+                <Input
+                  sx={{ width: '60px', padding: 1, textAlign: 'center' }}
+                  type="number"
+                  inputMode="numeric"
+                  value={foodItem.serving.toString().replace(/^0+/, '')}
+                  onChange={(e) =>
+                    handleSetAmount(+e.target.value, index, foodItem)
+                  }
+                />
+              </Stack>
+            );
+          })}
           <Divider />
           <SubTotal index={index} />
         </>
       ))}
       <Button
-          as={RouterLink}
-          to={'/'}
-          type="submit"
-          colorScheme="blue"
-          marginTop={5}
-        >
-          Mes repas
-        </Button>
+        as={RouterLink}
+        to={'/'}
+        type="submit"
+        colorScheme="blue"
+        marginTop={5}
+      >
+        Mes repas
+      </Button>
     </Box>
   );
 };

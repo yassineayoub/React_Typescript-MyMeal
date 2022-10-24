@@ -7,7 +7,7 @@ type FoodListProps = {
 
 const FoodMealName = ({ name }: FoodListProps) => {
   return (
-    <Badge color="ActiveCaption"  fontSize='xl'>Repas: {name}</Badge >
+    <Badge color="ActiveCaption"  fontSize='xl'>{name}</Badge >
   )
 }
 
