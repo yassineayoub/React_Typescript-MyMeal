@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import FoodMealName from '../Food/FoodMealName';
 import { FoodItem, setUpdatedFoodItem } from '../../reducers/mealReducer';
-import SubTotal from './SubTotal';
 import FoodCardTotal from './FoodCardTotal';
 import {
   Table,
@@ -23,6 +22,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { replace } from 'formik';
+import SubTotal from './SubTotal';
 
 const Total = () => {
   const { meals, myMeal } = useAppSelector((state) => state.meal);
@@ -30,7 +30,7 @@ const Total = () => {
   const [myMeals, setUpdatedMeals] = useState(meals);
   const [amount, setAmount] = useState<string | null>();
 
-  const test = myMeal.map((item) =>
+  const subTotal = myMeal.map((item) =>
     item.food.reduce(
       (arr, curr) => {
         arr.protein += curr.protein;
@@ -41,7 +41,17 @@ const Total = () => {
       { protein: 0, carbs: 0, fat: 0 }
     )
   );
-  console.log(test, test);
+  const total = subTotal.reduce(
+    (tot, curr) => {
+    tot.protein += curr.protein;
+    tot.carbs += curr.carbs;
+    tot.fat += curr.fat;
+    return tot }, {
+    protein: 0,
+    carbs: 0,
+    fat: 0,
+  });
+
 
   useEffect(() => {
     setUpdatedMeals(myMeal);
@@ -97,7 +107,6 @@ const Total = () => {
             marginBottom: '1rem',
             boxShadow:
               'rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px',
-            padding: '1rem',
           }}
           key={index}
         >
@@ -106,7 +115,7 @@ const Total = () => {
               <Table size="sm" variant="striped" colorScheme="teal">
                 <Thead>
                   <Tr>
-                    <FoodMealName name={name} />
+                    <Td>{name}</Td>
                   </Tr>
                   <Tr>
                     <Th>Nom</Th>
@@ -124,9 +133,11 @@ const Total = () => {
                           {foodItem.foodName.substring(0, 1).toUpperCase() +
                             foodItem.foodName.substring(1)}
                         </Td>
-                        <Td textAlign="center">{foodItem.protein}</Td>
-                        <Td textAlign="center">{foodItem.carbs}</Td>
-                        <Td textAlign="center">{foodItem.fat}</Td>
+                        <Td textAlign="center">
+                          {foodItem.protein.toFixed(0)}
+                        </Td>
+                        <Td textAlign="center">{foodItem.carbs.toFixed(0)}</Td>
+                        <Td textAlign="center">{foodItem.fat.toFixed(0)}</Td>
                         <Input
                           sx={{
                             width: '60px',
@@ -143,14 +154,53 @@ const Total = () => {
                       </Tr>
                     );
                   })}
+                  <Tr fontWeight="bold" borderTop="2px solid">
+                    <Td>TOT.</Td>
+                    <Td textAlign="center">
+                      {subTotal[index].protein.toFixed(1).replace('.', ',')}
+                    </Td>
+                    <Td textAlign="center">
+                      {subTotal[index].carbs.toFixed(1).replace('.', ',')}
+                    </Td>
+                    <Td textAlign="center">
+                      {subTotal[index].fat.toFixed(1).replace('.', ',')}
+                    </Td>
+                    <Td></Td>
+                  </Tr>
                 </Tbody>
               </Table>
             </TableContainer>
           </Stack>
           <Divider />
-          <SubTotal index={index} />
         </Box>
       ))}
+      <TableContainer>
+              <Table size="sm" variant="striped" colorScheme="teal">
+                <Thead>
+                  <Tr>
+                    <Th></Th>
+                    <Th textAlign="center">Proteines (g)</Th>
+                    <Th textAlign="center">Glucides (g)</Th>
+                    <Th textAlign="center">Lipides (g)</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  <Tr fontWeight="bold" borderTop="2px solid">
+                    <Td>TOTAL</Td>
+                    <Td textAlign="center">
+                      {total.protein.toFixed(1).replace('.', ',')}
+                    </Td>
+                    <Td textAlign="center">
+                      {total.carbs.toFixed(1).replace('.', ',')}
+                    </Td>
+                    <Td textAlign="center">
+                      {total.fat.toFixed(1).replace('.', ',')}
+                    </Td>
+                    <Td></Td>
+                  </Tr>
+                </Tbody>
+              </Table>
+            </TableContainer>
       <Button
         as={RouterLink}
         to={'/'}
