@@ -13,7 +13,7 @@ import { Link as RouterLink, useParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import FoodList from './FoodList';
 import FoodSearch from './FoodSearch';
-import { CheckIcon } from '@chakra-ui/icons';
+import { ArrowForwardIcon, CheckIcon } from '@chakra-ui/icons';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
   FoodItem,
@@ -164,7 +164,7 @@ const Food = () => {
           type="submit"
           colorScheme="green"
           marginTop={5}
-          rightIcon={<CheckIcon />}
+          rightIcon={<ArrowForwardIcon />}
         >
           Suivant
         </Button>
