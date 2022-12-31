@@ -36,7 +36,9 @@ const FoodCardTotal = ({
           justifyContent="center"
           spacing={10}
         >
-          <Box display="flex">{foodName}</Box>
+          <Box display="flex">
+            {foodName}
+          </Box>
           <Box
             sx={{ position: 'absolute', right: '3%' }}
           >{`/${serving}${unit}`}</Box>

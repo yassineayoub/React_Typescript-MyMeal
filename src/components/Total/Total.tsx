@@ -43,15 +43,17 @@ const Total = () => {
   );
   const total = subTotal.reduce(
     (tot, curr) => {
-    tot.protein += curr.protein;
-    tot.carbs += curr.carbs;
-    tot.fat += curr.fat;
-    return tot }, {
-    protein: 0,
-    carbs: 0,
-    fat: 0,
-  });
-
+      tot.protein += curr.protein;
+      tot.carbs += curr.carbs;
+      tot.fat += curr.fat;
+      return tot;
+    },
+    {
+      protein: 0,
+      carbs: 0,
+      fat: 0,
+    }
+  );
 
   useEffect(() => {
     setUpdatedMeals(myMeal);
@@ -115,7 +117,15 @@ const Total = () => {
               <Table size="sm" variant="striped" colorScheme="teal">
                 <Thead>
                   <Tr>
-                    <Td>{name}</Td>
+                    <Td
+                      sx={{
+                        fontWeight: 'bold',
+                        fontSize: '20px',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      {name.substring(0, 1).toUpperCase() + name.substring(1)}
+                    </Td>
                   </Tr>
                   <Tr>
                     <Th>Nom</Th>
@@ -175,32 +185,32 @@ const Total = () => {
         </Box>
       ))}
       <TableContainer>
-              <Table size="sm" variant="striped" colorScheme="teal">
-                <Thead>
-                  <Tr>
-                    <Th></Th>
-                    <Th textAlign="center">Proteines (g)</Th>
-                    <Th textAlign="center">Glucides (g)</Th>
-                    <Th textAlign="center">Lipides (g)</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  <Tr fontWeight="bold" borderTop="2px solid">
-                    <Td>TOTAL</Td>
-                    <Td textAlign="center">
-                      {total.protein.toFixed(1).replace('.', ',')}
-                    </Td>
-                    <Td textAlign="center">
-                      {total.carbs.toFixed(1).replace('.', ',')}
-                    </Td>
-                    <Td textAlign="center">
-                      {total.fat.toFixed(1).replace('.', ',')}
-                    </Td>
-                    <Td></Td>
-                  </Tr>
-                </Tbody>
-              </Table>
-            </TableContainer>
+        <Table size="sm" variant="striped" colorScheme="teal">
+          <Thead>
+            <Tr>
+              <Th></Th>
+              <Th textAlign="center">Proteines (g)</Th>
+              <Th textAlign="center">Glucides (g)</Th>
+              <Th textAlign="center">Lipides (g)</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            <Tr fontWeight="bold" borderTop="2px solid">
+              <Td>TOTAL</Td>
+              <Td textAlign="center">
+                {total.protein.toFixed(1).replace('.', ',')}
+              </Td>
+              <Td textAlign="center">
+                {total.carbs.toFixed(1).replace('.', ',')}
+              </Td>
+              <Td textAlign="center">
+                {total.fat.toFixed(1).replace('.', ',')}
+              </Td>
+              <Td></Td>
+            </Tr>
+          </Tbody>
+        </Table>
+      </TableContainer>
       <Button
         as={RouterLink}
         to={'/'}
